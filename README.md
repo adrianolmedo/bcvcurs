@@ -1,2 +1,3 @@
-# vecurs
-RESTful API to obtain values of official currencies in Venezuela
+# Venezolan currencies
+
+RESTful API to obtain values of official currencies in Venezuela.
