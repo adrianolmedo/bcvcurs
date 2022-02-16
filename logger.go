@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"time"
 )
 
 var ErrLoggerMissingValue = errors.New("(MISSING)")
@@ -15,13 +16,36 @@ type Logger interface {
 	Log(keyvals ...interface{}) error
 }
 
-// Debug is a simple JSON debugger.
+// Debug is a simple JSON logger with time by default, e.g.:
+// {"time":"2022-02-16T00:44:58.275093472-04:00"}
 type Debug struct {
 	io.Writer
+	timefmt string
 }
 
-func NewDebug(w io.Writer) Logger {
-	return &Debug{w}
+// NewDebug return a new Logger instance.
+//
+// Usage:
+//
+// b := NewDebug(&bytes.Buffer{})
+// d.Log("level", "error", "msg", "error message description")
+// {"level":"error","msg":"error message description","time":"2022-02-16T00:44:58.275093472-04:00"}
+//
+// Change time format:
+//
+// timefmt := func(s *Debug) {
+//		s.timefmt = "2006-01-02 15:04:05"
+// }
+//
+// d := NewDebug(&bytes.Buffer{}, timefmt)
+// d.Log()
+// {"time":"2022-02-16 00:46:46"}
+func NewDebug(w io.Writer, opts ...func(*Debug)) Logger {
+	d := &Debug{w, ""}
+	for _, opt := range opts {
+		opt(d)
+	}
+	return d
 }
 
 func (d *Debug) Log(keyvals ...interface{}) error {
@@ -34,6 +58,11 @@ func (d *Debug) Log(keyvals ...interface{}) error {
 			v = keyvals[i+1]
 		}
 		merge(m, k, v)
+	}
+
+	m["time"] = time.Now()
+	if d.timefmt != "" {
+		m["time"] = time.Now().Format(d.timefmt)
 	}
 
 	enc := json.NewEncoder(d.Writer)

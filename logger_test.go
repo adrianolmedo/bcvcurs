@@ -6,10 +6,22 @@ import (
 	"testing"
 )
 
+func Test_Log(t *testing.T) {
+	timefmt := func(s *Debug) {
+		s.timefmt = "2006-01-02 15:04:05"
+	}
+
+	d := NewDebug(&bytes.Buffer{}, timefmt)
+	d.Log("level", "error", "msg", "error message description")
+
+}
+
+// Run all tests with $ go test -run TestLog
+
 func TestLogger(t *testing.T) {
 	t.Parallel()
 	buf := &bytes.Buffer{}
-	debug := &Debug{buf}
+	debug := NewDebug(buf)
 
 	if err := debug.Log("err", errors.New("err"), "m", map[string]int{"0": 0}, "a", []int{1, 2, 3}); err != nil {
 		t.Fatal(err)
@@ -22,7 +34,7 @@ func TestLogger(t *testing.T) {
 func TestLoggerMissingValue(t *testing.T) {
 	t.Parallel()
 	buf := &bytes.Buffer{}
-	debug := &Debug{buf}
+	debug := NewDebug(buf)
 	if err := debug.Log("k"); err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +47,7 @@ func TestLoggerNilStringerKey(t *testing.T) {
 	t.Parallel()
 
 	buf := &bytes.Buffer{}
-	debug := &Debug{buf}
+	debug := NewDebug(buf)
 	if err := debug.Log((*stringer)(nil), "v"); err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +72,7 @@ func TestLoggerNilErrorValue(t *testing.T) {
 	t.Parallel()
 
 	buf := &bytes.Buffer{}
-	debug := &Debug{buf}
+	debug := NewDebug(buf)
 	if err := debug.Log("err", (*stringError)(nil)); err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +84,7 @@ func TestLoggerNilErrorValue(t *testing.T) {
 func TestLoggerNoHTMLEscape(t *testing.T) {
 	t.Parallel()
 	buf := &bytes.Buffer{}
-	debug := &Debug{buf}
+	debug := NewDebug(buf)
 	if err := debug.Log("k", "<&>"); err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +145,7 @@ func TestLoggerStringValue(t *testing.T) {
 
 	for _, test := range tests {
 		buf := &bytes.Buffer{}
-		debug := &Debug{buf}
+		debug := NewDebug(buf)
 		if err := debug.Log("v", test.v); err != nil {
 			t.Fatal(err)
 		}
