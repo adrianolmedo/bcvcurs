@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"net"
 	"net/http"
@@ -20,9 +19,11 @@ func main() {
 	flag.Parse()
 
 	cfg = &Config{
-		Addr:   *addr,
-		Port:   *port,
-		Logger: NewDebug(&bytes.Buffer{}),
+		Addr: *addr,
+		Port: *port,
+		Logger: NewDebug(func(d *Debug) {
+			d.timefmt = "2006-01-02 15:04:05"
+		}),
 	}
 
 	if err := run(); err != nil {
@@ -43,15 +44,17 @@ func run() error {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	cfg.Logger.Log("level", "info", "addr", cfg.Addr, "port", cfg.Port, "msg", "listening")
+	cfg.Logger.Log("level", "info", "addr", cfg.Addr+":"+strconv.Itoa(cfg.Port), "msg", "listening")
 	return s.ListenAndServe()
 }
 
-// getNetworkIP return local network IP. If you are not connected to IPv4 it will return empty string.
+// getNetworkIP return local network IP. If you are not connected to IPv4 it will return 127.0.0.1.
 func getNetworkIP() string {
+	ip := "127.0.0.1"
+
 	netInterfaceAddresses, err := net.InterfaceAddrs()
 	if err != nil {
-		return ""
+		return ip
 	}
 
 	for _, netInterfaceAddress := range netInterfaceAddresses {
@@ -62,5 +65,6 @@ func getNetworkIP() string {
 			return ip
 		}
 	}
-	return ""
+
+	return ip
 }
