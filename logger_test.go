@@ -1,57 +1,76 @@
 package main
 
 import (
-	"bytes"
 	"errors"
 	"testing"
 )
 
-func Test_Log(t *testing.T) {
+func TestLogCaller(t *testing.T) {
+	d := NewDebug()
+	have, err := d.SLog("caller", logCaller(1))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, have := `{"caller":"logger_test.go:10"}`+"\n", have; want != have {
+		t.Errorf("\nwant %#v\nhave %#v", want, have)
+	}
+}
+
+func TestTimeSLog(t *testing.T) {
 	timefmt := func(s *Debug) {
 		s.timefmt = "2006-01-02 15:04:05"
 	}
 
-	d := NewDebug(&bytes.Buffer{}, timefmt)
-	d.Log("level", "error", "msg", "error message description")
+	d := NewDebug(timefmt)
+	s, err := d.SLog("level", "error", "msg", "<&>")
+	if err != nil {
+		t.Fatal(err)
+	}
 
+	t.Log(s)
 }
 
 // Run all tests with $ go test -run TestLog
 
 func TestLogger(t *testing.T) {
 	t.Parallel()
-	buf := &bytes.Buffer{}
-	debug := NewDebug(buf)
+	debug := NewDebug()
 
-	if err := debug.Log("err", errors.New("err"), "m", map[string]int{"0": 0}, "a", []int{1, 2, 3}); err != nil {
+	have, err := debug.SLog("err", errors.New("err"), "m", map[string]int{"0": 0}, "a", []int{1, 2, 3})
+	if err != nil {
 		t.Fatal(err)
 	}
-	if want, have := `{"a":[1,2,3],"err":"err","m":{"0":0}}`+"\n", buf.String(); want != have {
+
+	want := `{"a":[1,2,3],"err":"err","m":{"0":0}}` + "\n"
+
+	if want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
 }
 
 func TestLoggerMissingValue(t *testing.T) {
 	t.Parallel()
-	buf := &bytes.Buffer{}
-	debug := NewDebug(buf)
-	if err := debug.Log("k"); err != nil {
+	debug := NewDebug()
+	have, err := debug.SLog("k")
+	if err != nil {
 		t.Fatal(err)
 	}
-	if want, have := `{"k":"(MISSING)"}`+"\n", buf.String(); want != have {
+
+	if want, have := `{"k":"(MISSING)"}`+"\n", have; want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
 }
 
 func TestLoggerNilStringerKey(t *testing.T) {
 	t.Parallel()
-
-	buf := &bytes.Buffer{}
-	debug := NewDebug(buf)
-	if err := debug.Log((*stringer)(nil), "v"); err != nil {
+	debug := NewDebug()
+	have, err := debug.SLog((*stringer)(nil), "v")
+	if err != nil {
 		t.Fatal(err)
 	}
-	if want, have := `{"NULL":"v"}`+"\n", buf.String(); want != have {
+
+	if want, have := `{"NULL":"v"}`+"\n", have; want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
 }
@@ -70,25 +89,26 @@ func (s stringError) Error() string {
 
 func TestLoggerNilErrorValue(t *testing.T) {
 	t.Parallel()
-
-	buf := &bytes.Buffer{}
-	debug := NewDebug(buf)
-	if err := debug.Log("err", (*stringError)(nil)); err != nil {
+	debug := NewDebug()
+	have, err := debug.SLog("err", (*stringError)(nil))
+	if err != nil {
 		t.Fatal(err)
 	}
-	if want, have := `{"err":null}`+"\n", buf.String(); want != have {
+
+	if want, have := `{"err":null}`+"\n", have; want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
 }
 
 func TestLoggerNoHTMLEscape(t *testing.T) {
 	t.Parallel()
-	buf := &bytes.Buffer{}
-	debug := NewDebug(buf)
-	if err := debug.Log("k", "<&>"); err != nil {
+	debug := NewDebug()
+	have, err := debug.SLog("k", "<&>")
+	if err != nil {
 		t.Fatal(err)
 	}
-	if want, have := `{"k":"<&>"}`+"\n", buf.String(); want != have {
+
+	if want, have := `{"k":"<&>"}`+"\n", have; want != have {
 		t.Errorf("\nwant %#v\nhave%#v", want, have)
 	}
 }
@@ -144,13 +164,13 @@ func TestLoggerStringValue(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		buf := &bytes.Buffer{}
-		debug := NewDebug(buf)
-		if err := debug.Log("v", test.v); err != nil {
+		debug := NewDebug()
+		have, err := debug.SLog("v", test.v)
+		if err != nil {
 			t.Fatal(err)
 		}
 
-		if want, have := test.expected+"\n", buf.String(); want != have {
+		if want, have := test.expected+"\n", have; want != have {
 			t.Errorf("\nwant %#v\nhave %#v", want, have)
 		}
 	}

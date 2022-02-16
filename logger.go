@@ -1,47 +1,51 @@
 package main
 
 import (
+	"bytes"
 	"encoding"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"reflect"
+	"runtime"
+	"strconv"
+	"strings"
 	"time"
 )
-
-var ErrLoggerMissingValue = errors.New("(MISSING)")
 
 type Logger interface {
 	Log(keyvals ...interface{}) error
 }
 
-// Debug is a simple JSON logger with time by default, e.g.:
-// {"time":"2022-02-16T00:44:58.275093472-04:00"}
 type Debug struct {
-	io.Writer
 	timefmt string
 }
 
-// NewDebug return a new Logger instance.
+// NewDebug provides a simple logger copied from the JSON version of https://github.com/go-kit/log/blob/main/json_logger.go
+// but with minor modifications.
 //
-// Usage:
+// - Usage:
 //
-// b := NewDebug(&bytes.Buffer{})
-// d.Log("level", "error", "msg", "error message description")
-// {"level":"error","msg":"error message description","time":"2022-02-16T00:44:58.275093472-04:00"}
+//		d := NewDebug()
+//		d.Log("level", "error", "msg", "error message description")
 //
-// Change time format:
+// Output:
 //
-// timefmt := func(s *Debug) {
-//		s.timefmt = "2006-01-02 15:04:05"
-// }
+//		{"level":"error","msg":"error message description","time":"2022-02-16T00:44:58.275093472-04:00"}
 //
-// d := NewDebug(&bytes.Buffer{}, timefmt)
-// d.Log()
-// {"time":"2022-02-16 00:46:46"}
-func NewDebug(w io.Writer, opts ...func(*Debug)) Logger {
-	d := &Debug{w, ""}
+// - Change time format:
+//
+//		timefmt := func(s *Debug) {
+//			s.timefmt = "2006-01-02 15:04:05"
+//		}
+//
+// 		d := NewDebug(timefmt)
+// 		d.Log()
+//
+// - Output:
+//
+// 		{"time":"2022-02-16 00:46:46"}
+func NewDebug(opts ...func(*Debug)) *Debug {
+	d := &Debug{""}
 	for _, opt := range opts {
 		opt(d)
 	}
@@ -49,34 +53,52 @@ func NewDebug(w io.Writer, opts ...func(*Debug)) Logger {
 }
 
 func (d *Debug) Log(keyvals ...interface{}) error {
+	s, err := d.SLog(keyvals...)
+	if err != nil {
+		return err
+	}
+	fmt.Print(s)
+	return nil
+}
+
+func (d *Debug) SLog(keyvals ...interface{}) (string, error) {
 	n := (len(keyvals) + 1) / 2 // +1 to handle case when len is odd
 	m := make(map[string]interface{}, n)
 	for i := 0; i < len(keyvals); i += 2 {
 		k := keyvals[i]
-		var v interface{} = ErrLoggerMissingValue
+		var v interface{} = "(MISSING)"
 		if i+1 < len(keyvals) {
 			v = keyvals[i+1]
 		}
 		merge(m, k, v)
 	}
 
-	m["time"] = time.Now()
 	if d.timefmt != "" {
-		m["time"] = time.Now().Format(d.timefmt)
+		m["time"] = time.Now()
+		if d.timefmt != "" {
+			m["time"] = time.Now().Format(d.timefmt)
+		}
 	}
 
-	enc := json.NewEncoder(d.Writer)
+	buf := &bytes.Buffer{}
+	enc := json.NewEncoder(buf)
 	enc.SetEscapeHTML(false)
 	err := enc.Encode(m)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(d.Writer)
-	return nil
+	return buf.String(), err
 }
 
-// merge helper for JSON debugger.
+// logCaller returns a string that returns a file and line from a specified depth
+// in the callstack.
+func logCaller(depth int) string {
+	_, file, line, _ := runtime.Caller(depth)
+	idx := strings.LastIndexByte(file, '/')
+	// using idx+1 below handles both of following cases:
+	// idx == -1 because no "/" was found, or
+	// idx >= 0 and we want to start at the character after the found "/".
+	return file[idx+1:] + ":" + strconv.Itoa(line)
+}
+
+// merge helper for map[string]interface in SLog func.
 func merge(dst map[string]interface{}, k, v interface{}) {
 	var key string
 	switch x := k.(type) {
@@ -103,7 +125,7 @@ func merge(dst map[string]interface{}, k, v interface{}) {
 	dst[key] = v
 }
 
-// safeString helper for debug JSON output.
+// safeString helper for map[string]interface in SLog func.
 func safeString(str fmt.Stringer) (s string) {
 	defer func() {
 		if panicVal := recover(); panicVal != nil {
@@ -118,7 +140,7 @@ func safeString(str fmt.Stringer) (s string) {
 	return
 }
 
-// safeError helper for debug JSON output.
+// safeError helper for map[string]interface in SLog func.
 func safeError(err error) (s interface{}) {
 	defer func() {
 		if panicVal := recover(); panicVal != nil {
