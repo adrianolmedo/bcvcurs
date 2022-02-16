@@ -74,10 +74,7 @@ func (d *Debug) SLog(keyvals ...interface{}) (string, error) {
 	}
 
 	if d.timefmt != "" {
-		m["time"] = time.Now()
-		if d.timefmt != "" {
-			m["time"] = time.Now().Format(d.timefmt)
-		}
+		m["time"] = time.Now().Format(d.timefmt)
 	}
 
 	buf := &bytes.Buffer{}
