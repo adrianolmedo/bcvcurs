@@ -18,12 +18,22 @@ func TestLogCaller(t *testing.T) {
 }
 
 func TestTimeSLog(t *testing.T) {
-	timefmt := func(s *Debug) {
-		s.timefmt = "2006-01-02 15:04:05"
+	d := NewDebug()
+
+	s, err := d.SLog("level", "error", "msg", "<&>")
+	if err != nil {
+		t.Fatal(err)
 	}
 
-	d := NewDebug(timefmt)
-	s, err := d.SLog("level", "error", "msg", "<&>")
+	t.Log(s)
+
+	// ---
+
+	d = NewDebug(func(s *Debug) {
+		s.timefmt = "2006-01-02 15:04:05"
+	})
+
+	s, err = d.SLog("level", "error", "msg", "<&>")
 	if err != nil {
 		t.Fatal(err)
 	}
