@@ -24,7 +24,7 @@ type MessageError struct {
 	Content string `json:"content"`
 }
 
-// newResponse return standar response JSON.
+// newResponse return standar response for future encoding to JSON.
 // Usage example: response := newResponse(msgOK, "resource updated", data).
 func newResponse(msgType, content string, data interface{}) Response {
 	var resp Response
@@ -53,17 +53,16 @@ func newResponse(msgType, content string, data interface{}) Response {
 
 type HandleFunc func(http.ResponseWriter, *http.Request)
 
-func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func rJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(statusCode)
-	b, err := json.Marshal(data)
+	err := json.NewEncoder(w).Encode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	w.Write(b)
 }
 
-func GET(hf HandleFunc) HandleFunc {
+func mGET(hf HandleFunc) HandleFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			methodNotAllowed(w, r)
@@ -74,5 +73,5 @@ func GET(hf HandleFunc) HandleFunc {
 }
 
 func methodNotAllowed(w http.ResponseWriter, r *http.Request) {
-	JSON(w, http.StatusMethodNotAllowed, newResponse(msgError, "method not allowed", nil))
+	rJSON(w, http.StatusMethodNotAllowed, newResponse(msgError, "method not allowed", nil))
 }

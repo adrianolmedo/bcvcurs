@@ -6,18 +6,6 @@ import (
 	"testing"
 )
 
-type stringer string
-
-func (s stringer) String() string {
-	return string(s)
-}
-
-type stringError string
-
-func (s stringError) Error() string {
-	return string(s)
-}
-
 func TestLogger(t *testing.T) {
 	t.Parallel()
 	buf := &bytes.Buffer{}
@@ -54,6 +42,18 @@ func TestLoggerNilStringerKey(t *testing.T) {
 	if want, have := `{"NULL":"v"}`+"\n", buf.String(); want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
+}
+
+type stringer string
+
+func (s stringer) String() string {
+	return string(s)
+}
+
+type stringError string
+
+func (s stringError) Error() string {
+	return string(s)
 }
 
 func TestLoggerNilErrorValue(t *testing.T) {
