@@ -38,18 +38,12 @@ func (d *Debug) Log(keyvals ...interface{}) error {
 
 	enc := json.NewEncoder(d.Writer)
 	enc.SetEscapeHTML(false)
-
 	err := enc.Encode(m)
 	if err != nil {
 		return err
 	}
 
-	b, err := json.Marshal(m)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(b))
+	fmt.Println(d.Writer)
 	return nil
 }
 
