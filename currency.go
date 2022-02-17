@@ -4,12 +4,13 @@ import (
 	"errors"
 )
 
-var ErrCurrencyNotFound = errors.New("currency not found")
+var ErrGettingData = errors.New("error getting data")
 
-type Money struct {
+type Currency struct {
 	Value  float64 `json:"value"`
 	Iso    string  `json:"iso"`
 	Symbol string  `json:"symbol"`
+	ID     string  `json:"-"`
 }
 
-//type Currencies []Money
+type Currencies []*Currency
