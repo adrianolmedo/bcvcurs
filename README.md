@@ -1,6 +1,6 @@
 # Venezolan currencies
 
-RESTful API to obtain values of official currencies in Venezuela.
+RESTful API to obtain values of official currencies in Venezuela directly from BCV (http://www.bcv.org.ve/).
 
 ## Run local
 
@@ -20,7 +20,7 @@ $ docker run -d -p 8080:80 --name vecurs vecurs:0.1
 
 ## Endpoints
 
-### **Get all currencies**
+### **All currencies**
 
 **GET:** `/v1`
 
@@ -85,7 +85,7 @@ Response (200 Ok):
 
 ---
 
-### **Get yuan*
+### **Get yuan**
 
 **GET:** `/yuan`
 
@@ -106,7 +106,7 @@ Response (200 Ok):
 
 ---
 
-### **Get lira*
+### **Lira**
 
 **GET:** `/lira`
 
@@ -127,7 +127,7 @@ Response (200 Ok):
 
 ---
 
-### **Get ruble*
+### **Ruble**
 
 **GET:** `/ruble`
 
@@ -148,7 +148,7 @@ Response (200 Ok):
 
 ---
 
-### **Get dollar*
+### **Dollar**
 
 **GET:** `/dollar`
 
