@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// Don't move this test from this lines.
 func TestLogCaller(t *testing.T) {
 	d := NewDebug()
 	have, err := d.SLog("caller", logCaller(1))
@@ -12,7 +13,7 @@ func TestLogCaller(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if want, have := `{"caller":"logger_test.go:10"}`+"\n", have; want != have {
+	if want, have := `{"caller":"logger_test.go:11"}`+"\n", have; want != have {
 		t.Errorf("\nwant %#v\nhave %#v", want, have)
 	}
 }
