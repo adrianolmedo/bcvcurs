@@ -28,8 +28,15 @@ type MessageError struct {
 // with rJSON func.
 //
 // - Usage:
-//		resp := newResponse(msgOK, "resource updated", data)
+//		resp := newResponse(msgOK, "resource updated", nil)
 // 		rJSON(w, http.StatusOK, resp)
+//
+// - Output:
+//		{
+//			"message_ok": {
+//				"content": "resource updated"
+//			}
+//		}
 func newResponse(msgType, content string, data interface{}) Response {
 	var resp Response
 
@@ -66,8 +73,7 @@ func rJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 
 type HandleFunc func(http.ResponseWriter, *http.Request)
 
-// mGET allows to pass a request only with the GET method,
-// otherwise it will report that an not allowed method has been used.
+// mGET allows to pass a request only with the GET method.
 func mGET(hf HandleFunc) HandleFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
