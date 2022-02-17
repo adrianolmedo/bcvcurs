@@ -64,7 +64,7 @@ Response (200 Ok):
 
 ---
 
-### **Get euro*
+### **Euro*
 
 **GET:** `/euro`
 
@@ -85,7 +85,7 @@ Response (200 Ok):
 
 ---
 
-### **Get yuan**
+### **Yuan**
 
 **GET:** `/yuan`
 
