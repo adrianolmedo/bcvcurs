@@ -64,7 +64,7 @@ Response (200 Ok):
 
 ---
 
-### **Euro*
+### **Euro**
 
 **GET:** `/euro`
 
