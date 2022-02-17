@@ -48,7 +48,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// get rublo
-		if path == "/v1/rublo" || path == "/v1/rublo/" {
+		if path == "/v1/ruble" || path == "/v1/ruble/" {
 			getOne(w, 3)
 			return
 		}
