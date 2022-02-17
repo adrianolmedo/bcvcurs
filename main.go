@@ -33,9 +33,7 @@ func main() {
 }
 
 func run() error {
-	http.HandleFunc("/", mGET(home()))
-	http.HandleFunc("/v1/", mGET(home()))
-	http.HandleFunc("/v1/dollar/", mGET(dollar(cfg.Logger)))
+	http.HandleFunc("/", mGET(router))
 
 	s := &http.Server{
 		Addr:           cfg.Addr + ":" + strconv.Itoa(cfg.Port),
