@@ -28,38 +28,37 @@ Response (200 Ok):
 
 ```json
 {
-    "data": [
-        {
-            "iso": "EUR",
-            "symbol": "€",
-            "value": 5.04244811
-        },
-        {
-            "iso": "CNY",
-            "symbol": "¥",
-            "value": 0.7005779
-        },
-        {
-            "iso": "TRY",
-            "symbol": "₺",
-            "value": 0.3255186
-        },
-        {
-            "iso": "RUB",
-            "symbol": "₽",
-            "value": 0.05899348
-        },
-        {
+    "data": {
+        "dollar": {
             "iso": "USD",
             "symbol": "$",
-            "value": 4.4369
+            "value": 4.4032
+        },
+        "euro": {
+            "iso": "EUR",
+            "symbol": "€",
+            "value": 5.00608614
+        },
+        "lira": {
+            "iso": "TRY",
+            "symbol": "₺",
+            "value": 0.3234693
+        },
+        "ruble": {
+            "iso": "RUB",
+            "symbol": "₽",
+            "value": 0.05774612
+        },
+        "yuan": {
+            "iso": "CNY",
+            "symbol": "¥",
+            "value": 0.694785
         }
-    ],
+    },
     "message_ok": {
         "content": ""
     }
 }
-
 ```
 
 ---

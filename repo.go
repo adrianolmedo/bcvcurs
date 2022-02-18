@@ -12,7 +12,7 @@ import (
 
 const URL = "http://www.bcv.org.ve/"
 
-var curs = Currencies{
+var cursBCV = []*Currency{
 	{
 		ID:     "euro",
 		Iso:    "EUR",
@@ -40,28 +40,51 @@ var curs = Currencies{
 	},
 }
 
-func getAll() (Currencies, error) {
+func getAll() (*Currencies, error) {
 	body, err := bodyFromURL(URL)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return nil, err
+		return &Currencies{}, err
 	}
 	defer body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return nil, err
+		return &Currencies{}, err
 	}
 
-	for _, cur := range curs {
+	curs := &Currencies{}
+
+	for _, cur := range cursBCV {
 		value, err := findValueByID(cur.ID, doc)
 		if err != nil {
 			cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-			return nil, err
+			return &Currencies{}, err
 		}
 		cur.Value = value
+
+		if cur.ID == "euro" {
+			curs.Euro = *cur
+		}
+
+		if cur.ID == "yuan" {
+			curs.Yuan = *cur
+		}
+
+		if cur.ID == "lira" {
+			curs.Lira = *cur
+		}
+
+		if cur.ID == "rublo" {
+			curs.Ruble = *cur
+		}
+
+		if cur.ID == "dolar" {
+			curs.Dollar = *cur
+		}
 	}
+
 	return curs, nil
 }
 
@@ -79,7 +102,7 @@ func getUnique(key int) (Currency, error) {
 		return Currency{}, err
 	}
 
-	value, err := findValueByID(curs[key].ID, doc)
+	value, err := findValueByID(cursBCV[key].ID, doc)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
 		return Currency{}, err
@@ -87,8 +110,8 @@ func getUnique(key int) (Currency, error) {
 
 	return Currency{
 		Value:  value,
-		Iso:    curs[key].Iso,
-		Symbol: curs[key].Symbol,
+		Iso:    cursBCV[key].Iso,
+		Symbol: cursBCV[key].Symbol,
 	}, nil
 }
 
