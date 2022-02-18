@@ -27,31 +27,26 @@ func router(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// get euro
 		if path == "/v1/euro" || path == "/v1/euro/" {
 			getOne(w, 0)
 			return
 		}
 
-		// get yuan
 		if path == "/v1/yuan" || path == "/v1/yuan/" {
 			getOne(w, 1)
 			return
 		}
 
-		// get lira
 		if path == "/v1/lira" || path == "/v1/lira/" {
 			getOne(w, 2)
 			return
 		}
 
-		// get rublo
 		if path == "/v1/ruble" || path == "/v1/ruble/" {
 			getOne(w, 3)
 			return
 		}
 
-		// get dollar
 		if path == "/v1/dollar" || path == "/v1/dollar/" {
 			getOne(w, 4)
 			return
