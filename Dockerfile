@@ -2,11 +2,16 @@ FROM golang:1.17-alpine AS build
 
 WORKDIR /src/
 COPY . .
-RUN CGO_ENABLED=0 go install .
+RUN go mod download && CGO_ENABLED=0 go install .
 
-RUN useradd -u 1234 nonroot
+ARG USERNAME=nonroot
+ARG USER_UID=1000
+ARG USER_GID=${USER_UID}
+RUN addgroup -g ${USER_GID} -S ${USERNAME} \
+    && adduser -D -u ${USER_UID} -S ${USERNAME} -s /bin/sh ${USERNAME}
 
 FROM scratch
+
 COPY --from=build /go/bin/vecurs /bin/vecurs
-USER nonroot
+USER ${USERNAME}
 ENTRYPOINT ["/bin/vecurs"]

@@ -7,22 +7,26 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/peterbourgon/ff/v3"
 )
 
 var cfg *Config
 
 func main() {
+	// Pass env vars to flags.
+	fs := flag.NewFlagSet("vecurs", flag.ExitOnError)
 	var (
-		addr = flag.String("addr", getNetworkIP(), "Internal address of the container")
-		port = flag.Int("port", 80, "Internal port of the container")
+		addr = fs.String("addr", getNetworkIP(), "Internal address of the container")
+		port = fs.Int("port", 80, "Internal port of the container")
 	)
-	flag.Parse()
+	ff.Parse(fs, os.Args[1:], ff.WithEnvVarNoPrefix())
 
 	cfg = &Config{
 		Addr: *addr,
 		Port: *port,
 		Logger: NewDebug(func(d *Debug) {
-			d.timefmt = "2006-01-02 15:04:05"
+			d.timefmt = "2006-01-02T15:15:04:05"
 		}),
 	}
 

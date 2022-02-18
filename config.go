@@ -7,6 +7,5 @@ type Config struct {
 	// Internal address of the container.
 	Addr string
 
-	// Logger.
 	Logger Logger
 }

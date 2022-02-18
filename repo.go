@@ -10,6 +10,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+const URL = "http://www.bcv.org.ve/"
+
 var curs = Currencies{
 	{
 		ID:     "euro",
