@@ -26,7 +26,7 @@ func main() {
 		Addr: *addr,
 		Port: *port,
 		Logger: NewDebug(func(d *Debug) {
-			d.timefmt = "2006-01-02 15:04:05"
+			d.timefmt = "2006-01-02T15:15:04:05"
 		}),
 	}
 
