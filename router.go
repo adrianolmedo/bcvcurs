@@ -52,12 +52,12 @@ func router(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := newResponse(msgOK, "path error", nil)
+		resp := newResponse(msgError, "path error", nil)
 		rJSON(w, http.StatusNotFound, resp)
 		return
 	}
 
-	resp := newResponse(msgOK, "path error", nil)
+	resp := newResponse(msgError, "path error", nil)
 	rJSON(w, http.StatusNotFound, resp)
 }
 
