@@ -1,4 +1,4 @@
-# Venezolan currencies
+# BCV currencies
 
 RESTful API to obtain values of official currencies in Venezuela directly from BCV (http://www.bcv.org.ve/).
 
