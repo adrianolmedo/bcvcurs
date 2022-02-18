@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-const URL = "http://www.bcv.org.ve/"
-
 // router handler GET: /
 func router(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
