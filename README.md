@@ -5,7 +5,7 @@ RESTful API to obtain values of official currencies in Venezuela directly from B
 ## Run local
 
 ```bash
-$ git clone https://github.com/adrianolmedo/vecurs.git
+$ git clone https://github.com/adrianolmedo/bcvcurs.git
 $ go install .
 $ vecurs -addr localhost -port 8080
 ```
@@ -13,9 +13,9 @@ $ vecurs -addr localhost -port 8080
 ## Run with Docker
 
 ```bash
-$ git clone https://github.com/adrianolmedo/vecurs.git
-$ docker build --tag vecurs:0.1 .
-$ docker run -d -p 8080:80 --name vecurs vecurs:0.1
+$ git clone https://github.com/adrianolmedo/bcvcurs.git
+$ docker build --tag bcvcurs:0.1 .
+$ docker run -d -p 8080:80 --name vecurs bcvcurs:0.1
 ```
 
 ## Endpoints

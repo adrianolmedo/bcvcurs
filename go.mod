@@ -1,4 +1,4 @@
-module github.com/adrianolmedo/vecurs
+module github.com/adrianolmedo/bcvcurs
 
 go 1.17
 
