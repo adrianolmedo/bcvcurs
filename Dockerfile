@@ -12,6 +12,6 @@ RUN addgroup -g ${USER_GID} -S ${USERNAME} \
 
 FROM scratch
 
-COPY --from=build /go/bin/vecurs /bin/vecurs
+COPY --from=build /go/bin/bcvcurs /bin/bcvcurs
 USER ${USERNAME}
-ENTRYPOINT ["/bin/vecurs"]
+ENTRYPOINT ["/bin/bcvcurs"]

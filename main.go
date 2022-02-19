@@ -15,7 +15,7 @@ var cfg *Config
 
 func main() {
 	// Pass env vars to flags.
-	fs := flag.NewFlagSet("vecurs", flag.ExitOnError)
+	fs := flag.NewFlagSet("bcvcurs", flag.ExitOnError)
 	var (
 		addr = fs.String("addr", getNetworkIP(), "Internal address of the container")
 		port = fs.Int("port", 80, "Internal port of the container")
