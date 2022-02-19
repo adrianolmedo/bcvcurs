@@ -14,10 +14,9 @@ $ bcvcurs -addr localhost -port 8080
 
 ```bash
 $ git clone https://github.com/adrianolmedo/bcvcurs.git
-$ docker build --tag bcvcurs:0.1 .
-$ docker run -d -p 8080:80 --name bcvcurs bcvcurs:0.1
+$ make
 ```
-
+Note: `make` by default runs the target defined in the `.DEFAULT_GOAL` variable of the `Makefile`
 ## Endpoints
 
 ### **All currencies**
