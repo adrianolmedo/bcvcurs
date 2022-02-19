@@ -64,6 +64,7 @@ func newResponse(msgType, content string, data interface{}) Response {
 
 func rJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(statusCode)
 	err := json.NewEncoder(w).Encode(&data)
 	if err != nil {

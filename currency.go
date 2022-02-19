@@ -13,4 +13,10 @@ type Currency struct {
 	ID     string  `json:"-"`
 }
 
-type Currencies []*Currency
+type Currencies struct {
+	Euro   Currency `json:"euro"`
+	Yuan   Currency `json:"yuan"`
+	Lira   Currency `json:"lira"`
+	Ruble  Currency `json:"ruble"`
+	Dollar Currency `json:"dollar"`
+}
