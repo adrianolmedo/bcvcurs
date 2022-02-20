@@ -12,7 +12,7 @@ import (
 
 const URL = "http://www.bcv.org.ve/"
 
-var cursBCV = [5]*Currency{
+var bcvCurs = [5]*Currency{
 	{
 		ID:     "euro",
 		Iso:    "EUR",
@@ -56,7 +56,7 @@ func getAll() (*Currencies, error) {
 
 	curs := &Currencies{}
 
-	for _, cur := range cursBCV {
+	for _, cur := range bcvCurs {
 		value, err := findValueByID(cur.ID, doc)
 		if err != nil {
 			cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
@@ -102,7 +102,7 @@ func getUnique(key int) (Currency, error) {
 		return Currency{}, err
 	}
 
-	value, err := findValueByID(cursBCV[key].ID, doc)
+	value, err := findValueByID(bcvCurs[key].ID, doc)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
 		return Currency{}, err
@@ -110,8 +110,8 @@ func getUnique(key int) (Currency, error) {
 
 	return Currency{
 		Value:  value,
-		Iso:    cursBCV[key].Iso,
-		Symbol: cursBCV[key].Symbol,
+		Iso:    bcvCurs[key].Iso,
+		Symbol: bcvCurs[key].Symbol,
 	}, nil
 }
 
