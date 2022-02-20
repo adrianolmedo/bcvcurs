@@ -16,14 +16,29 @@ $ bcvcurs -addr localhost -port 8080
 $ git clone https://github.com/adrianolmedo/bcvcurs.git
 $ make
 ```
-Note: `make` by default runs the target defined in the `.DEFAULT_GOAL` variable of the `Makefile`
+
+Note: `make` by default runs the target defined in the `.DEFAULT_GOAL` variable of the `Makefile`.
+
+## Content
+
+* [Endpoints](#endpoints)
+    * [All currencies](#all-currencies)
+    * [Euro](#euro)
+    * [Yuan](#yuan)
+    * [Lira](#lira)
+    * [Ruble](#ruble)
+    * [Dollar](#dollar)
+* [Errors](#errors)
+  * [Error path](#error-path)
+  * [Getting data](#getting-data)
+
 ## Endpoints
 
 ### **All currencies**
 
 **GET:** `/v1`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -66,7 +81,7 @@ Response (200 Ok):
 
 **GET:** `/euro`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -87,7 +102,7 @@ Response (200 Ok):
 
 **GET:** `/yuan`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -108,7 +123,7 @@ Response (200 Ok):
 
 **GET:** `/lira`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -129,7 +144,7 @@ Response (200 Ok):
 
 **GET:** `/ruble`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -150,7 +165,7 @@ Response (200 Ok):
 
 **GET:** `/dollar`
 
-Response (200 Ok):
+Response (200 OK):
 
 ```json
 {
@@ -161,6 +176,34 @@ Response (200 Ok):
     },
     "message_ok": {
         "content": ""
+    }
+}
+```
+
+---
+
+## **Errors**
+
+### **Error path**
+
+Response (404 Not Found):
+
+```json
+{
+    "message_error": {
+        "content": "path error"
+    }
+}
+```
+
+### **Getting data**
+
+Response (503 Service Unavailable):
+
+```json
+{
+    "message_error": {
+        "content": "error getting data"
     }
 }
 ```
