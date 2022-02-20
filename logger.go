@@ -24,25 +24,25 @@ type Debug struct {
 // NewDebug provides a simple JSON logger copied from https://github.com/go-kit/log/blob/main/json_logger.go
 // but with minor modifications:
 //
-//		d := NewDebug()
-//		d.Log("level", "error", "msg", "error message description")
+//     d := NewDebug()
+//     d.Log("level", "error", "msg", "error message description")
 //
 // Output:
 //
-//		{"level":"error","msg":"error message description"}
+//     {"level":"error","msg":"error message description"}
 //
 // Enable time setting its format:
 //
-//		timefmt := func(s *Debug) {
-//			s.timefmt = "2006-01-02 15:04:05"
-//		}
+//     timefmt := func(s *Debug) {
+//          s.timefmt = "2006-01-02 15:04:05"
+//     }
 //
-// 		d := NewDebug(timefmt)
-// 		d.Log("level", "error", "msg", "error message description")
+//     d := NewDebug(timefmt)
+//     d.Log("level", "error", "msg", "error message description")
 //
 // Output:
 //
-// 		{"level":"error","msg":"error message description","time":"2022-02-16 00:46:46"}
+//     {"level":"error","msg":"error message description","time":"2022-02-16 00:46:46"}
 func NewDebug(opts ...func(*Debug)) *Debug {
 	d := &Debug{}
 	for _, opt := range opts {

@@ -51,21 +51,23 @@ func newResponse(msgType, content string, data interface{}) Response {
 }
 
 // newResponseOK is for generate a JSON response body, e.g.:
-//		{
-//			"message_ok": {
-//				"content": "resource updated"
-//			}
-//		}
+//
+//     {
+//          "message_ok": {
+//               "content": "resource updated"
+//          }
+//     }
 func newResponseOK(content string, data interface{}) Response {
 	return newResponse(msgOK, content, data)
 }
 
 // newResponseError is for generate a JSON response body, e.g.:
-//		{
-//			"message_error": {
-//				"content": "error path"
-//			}
-//		}
+//
+//     {
+//          "message_error": {
+//               "content": "error path"
+//          }
+//     }
 func newResponseError(content string, data interface{}) Response {
 	return newResponse(msgError, content, data)
 }
