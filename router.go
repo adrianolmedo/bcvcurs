@@ -22,8 +22,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			resp := newResponseOK("", curs)
-			rJSON(w, http.StatusOK, resp)
+			rJSON(w, http.StatusOK, newResponseOK("", curs))
 			return
 		}
 
@@ -69,6 +68,5 @@ func getOne(w http.ResponseWriter, key int) {
 		return
 	}
 
-	resp := newResponseOK("", cur)
-	rJSON(w, http.StatusOK, resp)
+	rJSON(w, http.StatusOK, newResponseOK("", cur))
 }
