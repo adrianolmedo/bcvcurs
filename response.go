@@ -24,19 +24,7 @@ type MessageError struct {
 	Content string `json:"content"`
 }
 
-// newResponse return a standard response for future encoding to JSON
-// with rJSON func.
-//
-// - Usage:
-//		resp := newResponse(msgOK, "resource updated", nil)
-// 		rJSON(w, http.StatusOK, resp)
-//
-// - Output:
-//		{
-//			"message_ok": {
-//				"content": "resource updated"
-//			}
-//		}
+// newResponse return standard response depending of type message.
 func newResponse(msgType, content string, data interface{}) Response {
 	var resp Response
 
@@ -62,10 +50,22 @@ func newResponse(msgType, content string, data interface{}) Response {
 	return resp
 }
 
+// newResponseOK is for generate a JSON response body, e.g.:
+//		{
+//			"message_ok": {
+//				"content": "resource updated"
+//			}
+//		}
 func newResponseOK(content string, data interface{}) Response {
 	return newResponse(msgOK, content, data)
 }
 
+// newResponseError is for generate a JSON response body, e.g.:
+//		{
+//			"message_error": {
+//				"content": "error path"
+//			}
+//		}
 func newResponseError(content string, data interface{}) Response {
 	return newResponse(msgError, content, data)
 }
