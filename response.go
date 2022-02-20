@@ -62,6 +62,14 @@ func newResponse(msgType, content string, data interface{}) Response {
 	return resp
 }
 
+func newResponseOK(content string, data interface{}) Response {
+	return newResponse(msgOK, content, data)
+}
+
+func newResponseError(content string, data interface{}) Response {
+	return newResponse(msgError, content, data)
+}
+
 func rJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -86,5 +94,5 @@ func mGET(hf HandleFunc) HandleFunc {
 }
 
 func methodNotAllowed(w http.ResponseWriter, r *http.Request) {
-	rJSON(w, http.StatusMethodNotAllowed, newResponse(msgError, "method not allowed", nil))
+	rJSON(w, http.StatusMethodNotAllowed, newResponseError("method not allowed", nil))
 }
