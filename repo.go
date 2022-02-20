@@ -12,7 +12,7 @@ import (
 
 const URL = "http://www.bcv.org.ve/"
 
-var cursBCV = []*Currency{
+var cursBCV = [5]*Currency{
 	{
 		ID:     "euro",
 		Iso:    "EUR",

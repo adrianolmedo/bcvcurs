@@ -16,11 +16,12 @@ type Logger interface {
 	Log(keyvals ...interface{}) error
 }
 
+// Debug is a JSON logger.
 type Debug struct {
 	timefmt string
 }
 
-// NewDebug provides a simple logger copied from https://github.com/go-kit/log/blob/main/json_logger.go
+// NewDebug provides a simple JSON logger copied from https://github.com/go-kit/log/blob/main/json_logger.go
 // but with minor modifications:
 //
 //		d := NewDebug()
@@ -43,7 +44,7 @@ type Debug struct {
 //
 // 		{"level":"error","msg":"error message description","time":"2022-02-16 00:46:46"}
 func NewDebug(opts ...func(*Debug)) *Debug {
-	d := &Debug{""}
+	d := &Debug{}
 	for _, opt := range opts {
 		opt(d)
 	}

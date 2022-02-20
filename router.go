@@ -17,12 +17,12 @@ func router(w http.ResponseWriter, r *http.Request) {
 		if path == "/v1" || path == "/v1/" {
 			curs, err := getAll()
 			if err != nil {
-				resp := newResponse(msgError, err.Error(), nil)
+				resp := newResponseError(err.Error(), nil)
 				rJSON(w, http.StatusServiceUnavailable, resp)
 				return
 			}
 
-			resp := newResponse(msgOK, "", curs)
+			resp := newResponseOK("", curs)
 			rJSON(w, http.StatusOK, resp)
 			return
 		}
@@ -52,23 +52,23 @@ func router(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := newResponse(msgError, "path error", nil)
+		resp := newResponseError("path error", nil)
 		rJSON(w, http.StatusNotFound, resp)
 		return
 	}
 
-	resp := newResponse(msgError, "path error", nil)
+	resp := newResponseError("path error", nil)
 	rJSON(w, http.StatusNotFound, resp)
 }
 
 func getOne(w http.ResponseWriter, key int) {
 	cur, err := getUnique(key)
 	if err != nil {
-		resp := newResponse(msgError, err.Error(), nil)
+		resp := newResponseError(err.Error(), nil)
 		rJSON(w, http.StatusServiceUnavailable, resp)
 		return
 	}
 
-	resp := newResponse(msgOK, "", cur)
+	resp := newResponseOK("", cur)
 	rJSON(w, http.StatusOK, resp)
 }
