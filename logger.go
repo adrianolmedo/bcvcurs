@@ -43,7 +43,7 @@ type Debug struct {
 //
 // 		{"level":"error","msg":"error message description","time":"2022-02-16 00:46:46"}
 func NewDebug(opts ...func(*Debug)) *Debug {
-	d := &Debug{""}
+	d := &Debug{}
 	for _, opt := range opts {
 		opt(d)
 	}
