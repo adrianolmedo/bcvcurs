@@ -79,7 +79,7 @@ Response (200 OK):
 
 ### **Euro**
 
-**GET:** `/euro`
+**GET:** `/v1/euro`
 
 Response (200 OK):
 
@@ -100,7 +100,7 @@ Response (200 OK):
 
 ### **Yuan**
 
-**GET:** `/yuan`
+**GET:** `/v1/yuan`
 
 Response (200 OK):
 
@@ -121,7 +121,7 @@ Response (200 OK):
 
 ### **Lira**
 
-**GET:** `/lira`
+**GET:** `/v1/lira`
 
 Response (200 OK):
 
@@ -142,7 +142,7 @@ Response (200 OK):
 
 ### **Ruble**
 
-**GET:** `/ruble`
+**GET:** `/v1/ruble`
 
 Response (200 OK):
 
@@ -163,7 +163,7 @@ Response (200 OK):
 
 ### **Dollar**
 
-**GET:** `/dollar`
+**GET:** `/v1/dollar`
 
 Response (200 OK):
 
