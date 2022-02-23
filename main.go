@@ -2,25 +2,34 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
-
-	"github.com/peterbourgon/ff/v3"
 )
 
 var cfg *Config
 
 func main() {
-	// Pass env vars to flags.
-	fs := flag.NewFlagSet("bcvcurs", flag.ExitOnError)
+	// Flag or Env? Why not both for port?
+	defaultPort := 80
+	envPort, ok := os.LookupEnv("PORT")
+	if ok {
+		if p, err := strconv.Atoi(envPort); err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", err)
+			os.Exit(1)
+		} else {
+			defaultPort = p
+		}
+	}
+
 	var (
-		addr = fs.String("addr", getNetworkIP(), "Internal address of the container")
-		port = fs.Int("port", 80, "Internal port of the container")
+		addr = flag.String("addr", getNetworkIP(), "Internal address of the container")
+		port = flag.Int("port", defaultPort, "Internal port of the container")
 	)
-	ff.Parse(fs, os.Args[1:], ff.WithEnvVarNoPrefix())
+	flag.Parse()
 
 	cfg = &Config{
 		Addr: *addr,
@@ -31,7 +40,7 @@ func main() {
 	}
 
 	if err := run(); err != nil {
-		cfg.Logger.Log("level", "error", "msg", err.Error())
+		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
 }

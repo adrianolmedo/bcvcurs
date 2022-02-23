@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -44,14 +45,14 @@ func getAll() (*Currencies, error) {
 	body, err := bodyFromURL(URL)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return &Currencies{}, err
+		return nil, err
 	}
 	defer body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return &Currencies{}, err
+		return nil, err
 	}
 
 	curs := &Currencies{}
@@ -60,7 +61,7 @@ func getAll() (*Currencies, error) {
 		value, err := findValueByID(cur.ID, doc)
 		if err != nil {
 			cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-			return &Currencies{}, err
+			return nil, err
 		}
 		cur.Value = value
 
@@ -131,7 +132,7 @@ func bodyFromURL(url string) (body io.ReadCloser, err error) {
 func findValueByID(id string, doc *goquery.Document) (float64, error) {
 	s := doc.Find("div[id='" + id + "']").Find("strong").Text()
 	if s == "" {
-		return 0, ErrGettingData
+		return 0, errors.New("error getting data")
 	}
 
 	s = strings.TrimSpace(s)
