@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -131,7 +132,7 @@ func bodyFromURL(url string) (body io.ReadCloser, err error) {
 func findValueByID(id string, doc *goquery.Document) (float64, error) {
 	s := doc.Find("div[id='" + id + "']").Find("strong").Text()
 	if s == "" {
-		return 0, ErrGettingData
+		return 0, errors.New("error getting data")
 	}
 
 	s = strings.TrimSpace(s)
