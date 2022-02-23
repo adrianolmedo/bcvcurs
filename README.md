@@ -1,6 +1,6 @@
 # BCV currencies
 
-RESTful API to obtain values of official currencies in Venezuela directly from BCV (http://www.bcv.org.ve/).
+RESTful API to obtain values of currencies in Venezuela directly from BCV (http://www.bcv.org.ve/).
 
 ## Run local
 
