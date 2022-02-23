@@ -1,6 +1,6 @@
 # BCV currencies
 
-RESTful API to obtain values the currencies directly from BCV (http://www.bcv.org.ve/).
+RESTful API to obtain BCV currency values directly from the website (http://www.bcv.org.ve/).
 
 ## Run local
 
