@@ -44,14 +44,14 @@ func getAll() (*Currencies, error) {
 	body, err := bodyFromURL(URL)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return &Currencies{}, err
+		return nil, err
 	}
 	defer body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
 		cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-		return &Currencies{}, err
+		return nil, err
 	}
 
 	curs := &Currencies{}
@@ -60,7 +60,7 @@ func getAll() (*Currencies, error) {
 		value, err := findValueByID(cur.ID, doc)
 		if err != nil {
 			cfg.Logger.Log("level", "error", "msg", err.Error(), "caller", logCaller(1))
-			return &Currencies{}, err
+			return nil, err
 		}
 		cur.Value = value
 
