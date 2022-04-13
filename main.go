@@ -13,16 +13,12 @@ import (
 var cfg *Config
 
 func main() {
-	// Flag or Env? Why not both for port?
 	defaultPort := 80
-	envPort, ok := os.LookupEnv("PORT")
-	if ok {
-		if p, err := strconv.Atoi(envPort); err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
-			os.Exit(1)
-		} else {
-			defaultPort = p
-		}
+
+	// Flag or Env? Why not both for port?
+	err := portFromEnv(&defaultPort, "PORT")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
 	}
 
 	var (
@@ -57,6 +53,19 @@ func run() error {
 
 	cfg.Logger.Log("level", "info", "addr", cfg.Addr+":"+strconv.Itoa(cfg.Port), "msg", "listening")
 	return s.ListenAndServe()
+}
+
+// portFromEnv change port value by env var if is set in the system.
+func portFromEnv(port *int, env string) error {
+	envPort, ok := os.LookupEnv(env)
+	if ok {
+		p, err := strconv.Atoi(envPort)
+		if err != nil {
+			return err
+		}
+		*port = p
+	}
+	return nil
 }
 
 // getNetworkIP return local network IP. If you are not connected to IPv4 it will return 127.0.0.1.
